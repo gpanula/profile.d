@@ -1,0 +1,84 @@
+# ~/.bash_login runs after .bashrc and is *NOT* called for non-interactive shells
+#
+# this where we are setting various git variables
+
+# lets make sure we have git installed before setting git stuff
+which git > /dev/null 2>&1 
+
+if [ $? -gt 0 ]
+then
+  # no git, so bail out
+  return
+fi
+
+# set git name and email stuff
+if [ -f ~/.gitconfig ]
+then
+	GITEMAIL=$(git config --global user.email)
+	GITNAME=$(git config --global user.name)
+fi
+
+if [ -z "${GITNAME}" ] 
+then
+	# lets check the environment
+	GITNAME=$( echo $GIT_AUTHOR_NAME | awk '{print $1,$2}' )
+fi
+
+if [ -z "${GITEMAIL}" ]
+then
+	# lets check the environment
+	GITEMAIL=$( echo $GIT_AUTHOR_EMAIL )
+fi
+
+# skip prompting for a git name
+# # needed to avoid breaking scripts
+if [ ${EUID} == 0 ] && [ -e /root/.gitdontbotherme ]
+then
+	return
+fi
+
+if [ -z "${GITNAME}" ] || [ -z "${GITEMAIL}" ]
+then
+    while [ -z "${name}" ]; do
+    echo -n "Please give me a name for use with GIT [First Last]? "
+    read name
+  done
+
+	GITNAME="${name}"
+	GITEMAIL="$(echo "${name}" | awk '{print tolower(substr($1, 1, 1)$2)"@mednetstudy.com"}')"
+
+	if [ ${EUID} -gt 0 ]
+	then
+		git config --global user.email "${GITEMAIL}"
+		git config --global user.name "${GITNAME}"
+		git config --global push.default current
+	fi
+fi
+
+# Not Root?  Great lets setup your GIT environment vars
+if [ ${EUID} -gt 0 ]
+then
+	export GIT_COMMITTER_EMAIL="${GITEMAIL}"
+	export GIT_AUTHOR_EMAIL="${GITEMAIL}"
+	export GIT_COMMITTER_NAME="${GITNAME}"
+	export GIT_AUTHOR_NAME="${GITNAME}"
+fi
+
+# and set some global git stuff
+	git config --global core.excludesfile ~/.gitignore
+	git config --global color.ui auto
+	git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+	git config --global diff.renames copy
+	# these git bits are from -> http://tracker.imednet.com/projects/imednet/wiki/DevOps_WI_Resource_-_Incoming_Developer_User
+ 	git config --global branch.autosetupmerge true
+ 	git config --global merge.log true
+ 	git config --global core.filemode false
+ 	git config --global alias.co checkout
+ 	git config --global alias.s status
+ 	git config --global alias.l "log --graph --decorate" 
+ 	git config --global alias.lns "log --graph --decorate --name-status" 
+ 	git config --global alias.b branch
+ 	git config --global alias.a add
+ 	git config --global alias.d diff
+ 	git config --global alias.cp cherry-pick
+
