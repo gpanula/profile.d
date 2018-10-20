@@ -2,19 +2,13 @@
 
 use_color=false
 
-# Set colorful PS1 only on colorful terminals.
-# dircolors --print-database uses its own built-in database
-# instead of using /etc/DIR_COLORS.  Try to use the external file
-# first to take advantage of user additions.  Use internal bash
-# globbing instead of external grep binary.
-safe_term=${TERM//[^[:alnum:]]/?}   # sanitize TERM
-match_lhs=""
-[[ -f ~/.dir_colors   ]] && match_lhs="${match_lhs}$(<~/.dir_colors)"
-[[ -f /etc/DIR_COLORS ]] && match_lhs="${match_lhs}$(</etc/DIR_COLORS)"
-[[ -z ${match_lhs}    ]] \
-        && type -P dircolors >/dev/null \
-        && match_lhs=$(dircolors --print-database)
-[[ $'\n'${match_lhs} == *$'\n'"TERM "${safe_term}* ]] && use_color=true
+# couple quick checks for color support term
+# ref: https://unix.stackexchange.com/questions/9957/how-to-check-if-bash-can-print-colors#10065
+[[ $( tput colors ) > 8 ]] && use_color=true
+
+# ref: https://unix.stackexchange.com/questions/450365/check-if-terminal-supports-24-bit-true-color
+# ref: https://gist.github.com/XVilka/8346728#detection
+[[ $COLORTERM =~ ^(truecolor|24bit)$ ]] && use_color=true
 
 if ${use_color} ; then
         # Enable colors for ls, etc.  Prefer ~/.dir_colors #64489
