@@ -1,6 +1,9 @@
 # this just bundles all the various /etc/profile.d bit together
 # makes it easier to setup your local environment from a .rc or .profile config
 
+# make sure we are generating log messages for the creation & destruction of shells
+[ -z "${SHELL_PID}" ] && source /etc/profile.d/log-shells.sh
+
 # useful global aliases
 [ -f /etc/profile.d/aliases ] && source /etc/profile.d/aliases
 
