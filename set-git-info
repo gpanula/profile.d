@@ -32,7 +32,7 @@ fi
 
 # skip prompting for a git name
 # # needed to avoid breaking scripts
-if [ ${EUID} == 0 ] && [ -e /root/.gitdontbotherme ]
+if [ ~/.gitdontbotherme ]
 then
 	return
 fi
@@ -40,12 +40,18 @@ fi
 if [ -z "${GITNAME}" ] || [ -z "${GITEMAIL}" ]
 then
     while [ -z "${name}" ]; do
-    echo -n "Please give me a name for use with GIT [First Last]? "
-    read name
-  done
+    	echo -n "Please give me a name for use with GIT [First Last] "
+    	read name
+  	done
 
 	GITNAME="${name}"
-	GITEMAIL="$(echo "${name}" | awk '{print tolower(substr($1, 1, 1)$2)"@mednetstudy.com"}')"
+
+	while [ -z "${email}" ]; do
+		echo -n "Please give me an email address for use with GIT "
+		read email
+	done
+
+	GITEMAIL="${email}"
 
 	if [ ${EUID} -gt 0 ]
 	then
@@ -65,14 +71,33 @@ then
 fi
 
 # and set some global git stuff
+# useful ref: http://tracker.imednet.com/projects/imednet/wiki/DevOps_WI_Resource_-_Incoming_Developer_User
 	git config --global core.excludesfile ~/.gitignore
+	git config --global core.filemode false
+
 	git config --global color.ui auto
-	git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+	git config --global color.diff auto
+	
+	# specific color bits for branch
+	git config --global color.branch auto
+	git config --global color.branch.current "yellow reverse"
+	git config --global color.branch.local yellow
+	git config --global color.branch.remote green
+
+	# specific color bits for status
+	git config --global color.status auto
+	git config --global color.status.added yellow
+	git config --global color.status.changed green
+	git config --global color.status.untracked cyan
+
 	git config --global diff.renames copy
-	# these git bits are from -> http://tracker.imednet.com/projects/imednet/wiki/DevOps_WI_Resource_-_Incoming_Developer_User
+	
+	git config --global push.default current
  	git config --global branch.autosetupmerge true
  	git config --global merge.log true
- 	git config --global core.filemode false
+	git config --global grep.lineNumber true
+ 	
+	git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
  	git config --global alias.co checkout
  	git config --global alias.s status
  	git config --global alias.l "log --graph --decorate" 
@@ -81,4 +106,3 @@ fi
  	git config --global alias.a add
  	git config --global alias.d diff
  	git config --global alias.cp cherry-pick
-

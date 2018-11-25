@@ -1,3 +1,4 @@
 # set the default timezone for the shells to CST6CDT
+# this can be over-rode in the user's .bashrc
 export TZ="CST6CDT"
 

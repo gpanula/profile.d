@@ -1,0 +1,18 @@
+# setup some aliases
+alias d="ls --color"
+alias ls="ls --color=auto"
+alias ll="ls --color -l"
+alias la="ls --color -a"
+alias lart="ls --color -lart"
+alias larth="ls --color -larth"
+alias arin="whois -h whois.arin.net"
+alias ripe="whois -h whois.ripe.net"
+
+# useful xfreerdp alias
+alias xfreerdp="xfreerdp /size:1366x768 +compression -wallpaper -themes +clipboard +smart-sizing"
+
+# use vi as the EDITOR
+export EDITOR="vim"
+
+# give us a colorful vi
+alias vi="vim"

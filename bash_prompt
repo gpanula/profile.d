@@ -45,12 +45,13 @@ else
 fi
 
 # Try to keep environment pollution down, EPA loves us.
-unset use_color safe_term match_lhs
+unset use_color safe_term match_lhs# We only want the git prompt info in directories that are git repos
+GIT_PROMPT_ONLY_IN_REPO=1
 
 ## Try adding git info above the prompt
 ## https://github.com/magicmonty/bash-git-prompt
-if [ -f ~/.bash-git-prompt/gitprompt.sh ]; then
+if [ -f /etc/profile.d/bash-git-prompt/gitprompt.sh ]; then
 	GIT_PROMPT_START="\[\033[01;35m\][\u]\[\033[m\]"
 	GIT_PROMPT_END="\n\[\033[01;36m\][\h]\[\033[01;31m\]:\[\033[01;33m\][\${PWD}] \\$ \[\033[00m\]"
-	source ~/.bash-git-prompt/gitprompt.sh
+	source /etc/profile.d/bash-git-prompt/gitprompt.sh
 fi

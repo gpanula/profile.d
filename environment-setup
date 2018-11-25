@@ -1,0 +1,62 @@
+# this just bundles all the various /etc/profile.d bit together
+# makes it easier to setup your local environment from a .rc or .profile config
+
+# useful global aliases
+[ -f /etc/profile.d/aliases ] && source /etc/profile.d/aliases
+
+# use vi as my EDITOR
+export EDITOR="vim"
+
+# give me a colorful vi
+alias vi="vim"
+
+# Change the window title of X terminals 
+[ -f /etc/profile.d/xterm-title ] && source /etc/profile.d/xterm-title
+
+# Grab the local colorful bash prompt setting
+[ -f /etc/profile.d/bash_prompt ] && source /etc/profile.d/bash_prompt
+
+# locale settings
+[ -f /etc/profile.d/locale ] && source /etc/profile.d/locale
+
+# set the shell's timezone.  this can be overrode in the user's .bashrc
+[ -f /etc/profile.d/default_timezone ] && source /etc/profile.d/default_timezone
+
+# define some useful aws cli related functions
+# useful aws cli reference
+# http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#config-settings-and-precedence
+[ -f /etc/profile.d/aws-functions ] && source /etc/profile.d/aws-functions
+
+# some terraform/terragrunt bits
+[ -f /etc/profile.d/terraform ] && source /etc/profile.d/terraform
+
+# configure git for us
+[ -f /etc/profile.d/set-git-info ] && source /etc/profile.d/set-git-info
+
+# We only want the git prompt info in directories that are git repos
+GIT_PROMPT_ONLY_IN_REPO=1
+
+# Fix for "X11 connection rejected because of wrong authentication."
+# when using sudo
+# NOTE: also need to add the following to /etc/sudoers
+# Defaults env_keep += "DISPLAY XAUTHORIZATION XAUTHORITY"
+[ -f /home/$USER/.Xauthority ] && export XAUTHORITY=/home/$USER/.Xauthority
+
+# configure PATH
+# set PATH to include bin in the user's home directory
+PATH="${PATH}:/usr/sbin/:/sbin:/usr/local/bin:/usr/local/sbin:/home/${USER}/bin"
+export PATH
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
