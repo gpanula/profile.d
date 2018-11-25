@@ -1,0 +1,7 @@
+# enable terraform logging
+# https://www.terraform.io/docs/internals/debugging.html
+alias tflog='export TF_LOG=INFO && export TF_LOG_PATH=terraform.log'
+
+# always update source when running terragrunt
+# https://github.com/gruntwork-io/terragrunt/pull/387
+export TERRAGRUNT_SOURCE_UPDATE=true
