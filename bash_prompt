@@ -4,7 +4,7 @@ use_color=false
 
 # couple quick checks for color support term
 # ref: https://unix.stackexchange.com/questions/9957/how-to-check-if-bash-can-print-colors#10065
-[[ $( tput colors ) > 8 ]] && use_color=true
+[[ $( tput colors ) -gt 8 ]] && use_color=true
 
 # ref: https://unix.stackexchange.com/questions/450365/check-if-terminal-supports-24-bit-true-color
 # ref: https://gist.github.com/XVilka/8346728#detection
