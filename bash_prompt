@@ -53,5 +53,6 @@ GIT_PROMPT_ONLY_IN_REPO=1
 if [ -f /etc/profile.d/bash-git-prompt/gitprompt.sh ]; then
 	GIT_PROMPT_START="\[\033[01;35m\][\u]\[\033[m\]"
 	GIT_PROMPT_END="\n\[\033[01;36m\][\h]\[\033[01;31m\]:\[\033[01;33m\][\${PWD}] \\$ \[\033[00m\]"
+	GIT_PROMPT_VIRTUALENV="(_VIRTUALENV_) "
 	source /etc/profile.d/bash-git-prompt/gitprompt.sh
 fi
